@@ -12,26 +12,21 @@ bot.setMyCommands([
 ])
 
 
-bot.onText(/\/start/, msg => {
-    bot.sendMessage(msg.chat.id, debug(msg));
-})
-
-
-bot.onText(/\/info (.+)/, (msg, [source, match]) => {
-    bot.sendMessage(msg.chat.id, debug(match));
-})
-
-//
-// bot.on("message", msg => {
-//     const id = msg.chat.id;
-//
-//     bot.sendMessage(id, debug(msg))
-//         .then(() => {
-//             console.log("Message has been send");
-//         })
-//         .catch((error) => {
-//             console.log(error);
-//         });
-//
-//     console.log(msg)
+// bot.onText(/\/start/, msg => {
+//     bot.sendMessage(msg.chat.id, debug(msg));
 // })
+//
+//
+// bot.onText(/\/info (.+)/, (msg, [source, match]) => {
+//     bot.sendMessage(msg.chat.id, debug(match));
+// })
+
+
+bot.on("message", msg => {
+    const html = `<strong>Hello, ${msg.from.first_name}</strong>
+<pre>${debug(msg)}</pre>`;
+
+    bot.sendMessage(msg.chat.id, html, {
+        parse_mode: "HTML"
+    })
+})
