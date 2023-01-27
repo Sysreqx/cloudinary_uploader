@@ -12,21 +12,37 @@ bot.setMyCommands([
 ])
 
 
-// bot.onText(/\/start/, msg => {
-//     bot.sendMessage(msg.chat.id, debug(msg));
-// })
-//
-//
-// bot.onText(/\/info (.+)/, (msg, [source, match]) => {
-//     bot.sendMessage(msg.chat.id, debug(match));
-// })
-
-
 bot.on("message", msg => {
-    const html = `<strong>Hello, ${msg.from.first_name}</strong>
-<pre>${debug(msg)}</pre>`;
 
-    bot.sendMessage(msg.chat.id, html, {
-        parse_mode: "HTML"
+    const chatId = msg.chat.id;
+
+    bot.sendMessage(chatId, "Inline keyboard", {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    {
+                        text: "Google",
+                        url: "https://google.com"
+                    }
+                ],
+                [
+                    {
+                        text: "Reply",
+                        callback_data: "reply"
+                    },
+                    {
+                        text: "Forward",
+                        callback_data: "forward"
+                    }
+                ]
+            ]
+        }
     })
+
+})
+
+bot.on("callback_query", query => {
+    // bot.sendMessage(query.message.chat.id, debug(query))
+
+    bot.answerCallbackQuery(query.id, `${query.data}`)
 })
