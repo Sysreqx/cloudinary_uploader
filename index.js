@@ -5,44 +5,21 @@ const token = "5803275171:AAEow7ZrOp3OUPiTVdy9RsbpGOibFTZ19pI";
 
 const bot = new TelegramApi(token, {polling: true});
 
+bot.on("inline_query", query => {
 
-bot.setMyCommands([
-    {command: "/start", description: "Начальное приветствие"},
-    {command: "/info", description: "Получить информацию о пользователе"}
-])
+    let results = [];
 
+    for (let i = 0; i < 5; i++) {
+        results.push({
+            type: "article",
+            id: i.toString(),
+            title: `title #${i + 1}`,
+            input_message_content: {
+                message_text: `article #${i + 1}`
+            }
+        })
+    }
 
-bot.on("message", msg => {
+    bot.answerInlineQuery(query.id, results).then();
 
-    const chatId = msg.chat.id;
-
-    bot.sendMessage(chatId, "Inline keyboard", {
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "Google",
-                        url: "https://google.com"
-                    }
-                ],
-                [
-                    {
-                        text: "Reply",
-                        callback_data: "reply"
-                    },
-                    {
-                        text: "Forward",
-                        callback_data: "forward"
-                    }
-                ]
-            ]
-        }
-    })
-
-})
-
-bot.on("callback_query", query => {
-    // bot.sendMessage(query.message.chat.id, debug(query))
-
-    bot.answerCallbackQuery(query.id, `${query.data}`)
 })
